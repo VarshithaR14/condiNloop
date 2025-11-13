@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Conditionals & Looping Statement(Presentation) — Varshitha R [MCA]</title>
+  <style>
+    /* ---------- Theme: Lavender base with mint highlights (soft pastel) ---------- */
+    :root{
+      --lav-base-1: #9bbecd;
+      --lav-base-2: #b1bedb;
+      --mint-1: #c496ce;
+      --mint-2: #7ec6ad;
+      --accent-lav: #9e85ff;
+      --accent-mint: #44bfa6;
+      --muted: #6b7280;
+      --text: #3b3446;
+      --card: #ffffffcc;
+      --shadow: rgba(50,40,80,0.08);
+    }
+
+    /* page */
+    html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text);}
+    body{
+      display:flex;justify-content:center;padding:28px 18px;
+      background:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'><g fill='none' stroke='%23b3f0db' stroke-width='1' opacity='0.13'><path d='M12 42 q18 -18 36 0'/><path d='M132 132 q18 -18 36 0'/><path d='M40 18 v20'/><path d='M120 40 v20'/><path d='M60 80 h40'/><path d='M40 120 l8 -8'/></g></svg>"),
+        linear-gradient(160deg,var(--lav-base-1) 0%,var(--lav-base-2) 60%, #f0fff8 100%);
+      background-attachment: fixed;
+    }
+
+    .container{width:100%;max-width:1180px;}
+
+    header{ text-align:center; margin-bottom:12px; }
+    header h1{ margin:0; color:var(--accent-lav); font-size:24px; font-weight:800; letter-spacing:0.2px; animation:fadeDown .6s ease; }
+    header p{ margin:6px 0 0 0; color:var(--muted); font-size:14px; }
+
+    /* hero */
+    .hero{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.7));
+      padding:16px;border-radius:14px;box-shadow:0 10px 30px var(--shadow);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.6);
+    }
+    .hero .title{ color:var(--accent-lav); font-weight:700; font-size:18px; }
+    .hero .subtitle{ color:var(--muted); font-size:13px; margin-top:6px; }
+
+    /* buttons/nav */
+    .btn{
+      padding:10px 16px;border-radius:999px;border:none;cursor:pointer;font-weight:700;
+      background:linear-gradient(90deg,var(--mint-1),var(--lav-base-2)); color:var(--text);
+      box-shadow:0 8px 22px rgba(66,191,166,0.08); transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .btn:hover{ transform:translateY(-5px); box-shadow:0 14px 36px rgba(66,191,166,0.12); }
+
+    nav{ margin:16px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+    .nav-btn{
+      padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700;
+      background: linear-gradient(135deg,var(--mint-1),var(--lav-base-2));
+      color:var(--text); box-shadow:0 8px 22px var(--shadow); transition:transform .18s ease;
+    }
+    .nav-btn:hover{ transform:translateY(-4px); }
+
+    /* slides */
+    main{ margin-top:6px; }
+    section.slide{
+      display:none; background:var(--card); border-radius:12px; padding:20px; margin-bottom:18px;
+      box-shadow:0 12px 40px var(--shadow); opacity:0; transform:translateY(10px);
+      transition:opacity .48s ease, transform .48s ease;
+    }
+    section.slide.active{ display:block; opacity:1; transform:translateY(0); }
+
+    h2{ color:var(--accent-lav); margin:0 0 8px 0; font-size:20px; }
+    h3{ color:var(--accent-mint); margin:12px 0 8px 0; font-size:15px; }
+
+    p{ color:var(--text); line-height:1.6; }
+    .muted{ color:var(--muted); font-size:13px; }
+
+    pre{
+      background: #fbfbff; border-radius:8px; padding:12px; overflow:auto;
+      font-family:Consolas,monospace; font-size:14px; border:1px solid rgba(158,133,255,0.08);
+      color:var(--text); margin:8px 0;
+    }
+    .example-label{ font-weight:700; font-size:13px; color:var(--accent-mint); margin-top:8px; }
+
+    .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+    .diagram{ background:linear-gradient(180deg,#fff,#fffefc); padding:12px; border-radius:10px; border:1px solid rgba(158,133,255,0.07); }
+
+    footer{ text-align:center; color:var(--muted); font-size:13px; margin-top:8px; }
+
+    .controls{ display:flex; gap:8px; justify-content:center; margin-top:10px; }
+
+    @media(max-width:920px){ .two-col{ grid-template-columns:1fr; } .hero{flex-direction:column;align-items:flex-start} }
+
+    /* small animations */
+    @keyframes fadeDown{ from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:none} }
+    @keyframes titleIn{ from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none} }
+    .small-note{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+    /* flow svg sizing */
+    .flow-svg{ width:100%; max-width:820px; display:block; margin:10px auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Conditionals & Looping Statement in Programming Language</h1>
+      
+    </header>
+
+    <div class="hero" role="banner">
+      <div>
+        <div class="title">Presented By Varshitha R[MCA]</div>
+       
+      </div>
+      <div>
+        <button class="btn" id="startBtn">Start Presentation</button>
+      </div>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <button class="nav-btn" onclick="show('intro')">Intro</button>
+      <button class="nav-btn" onclick="show('cond-basics')">Conditionals</button>
+      <button class="nav-btn" onclick="show('cond-advanced')">Advanced Cond.</button>
+      <button class="nav-btn" onclick="show('loop-basics')">Loops</button>
+      <button class="nav-btn" onclick="show('loop-advanced')">Advanced Loops</button>
+      <button class="nav-btn" onclick="show('pitfalls')">Pitfalls</button>
+      <button class="nav-btn" onclick="show('practice')">Practice (Real-world)</button>
+      <button class="nav-btn" onclick="show('summary')">Summary</button>
+    </nav>
+
+    <main id="slides">
+      <!-- INTRO -->
+      <section id="intro" class="slide active" role="region" aria-label="Introduction">
+        <h2>Introduction</h2>
+        <p>In Python, <strong>conditionals</strong> control which code runs (branching). <strong>Loops</strong> repeat actions. Mastering these helps you implement algorithms, process data, validate input, and reason about program complexity.</p>
+        <div class="two-col">
+          <div>
+            <h3>Overview</h3>
+            <ul>
+              <li>Conditional and Looping help control how a program executes based on conditions or repeated actions.</li>
+              <li>Help reduce code repetition and improve efficiency.</li>
+              <li>Allow programs to respond dynamically to different inputs.</li>
+              <li>Logic is the soul of programming — and control statements bring it to life.</li>
+            </ul>
+          </div>
+          <div class="diagram" aria-hidden="false">
+            <svg class="flow-svg" viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="control flow overview">
+              <rect x="6" y="6" width="748" height="128" rx="10" fill="#fff" stroke="#efe8ff"/>
+              <text x="20" y="28" fill="#6d5acb" font-weight="700">Control Flow — Overview</text>
+              <g transform="translate(20,40)">
+                <polygon points="60,0 110,40 60,80 10,40" fill="#e8fff6" stroke="#b3f0db"></polygon>
+                <text x="28" y="46" fill="#3b3446" font-size="12">condition?</text>
+                <circle cx="250" cy="40" r="28" fill="#f6f2ff" stroke="#d6cfff"></circle>
+                <text x="235" y="46" fill="#3b3446" font-size="12">loop</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONDITIONAL BASICS -->
+      <section id="cond-basics" class="slide" role="region" aria-label="Conditionals basics">
+        <h2>Conditional Statements </h2>
+
+        <h3>Syntax: if</h3>
+        <p><strong>Structure</strong>: <code>if &lt;condition&gt;:</code> followed by an indented block. Python uses indentation (4 spaces recommended) instead of braces.</p>
+        <pre>
+# if example
+x = 10
+if x &gt; 5:
+    print("x is greater than 5")
+# Output:
+# x is greater than 5
+        </pre>
+        <div class="small-note muted">Explain: condition evaluates to True/False. If True -> run indented block.</div>
+
+        <h3>Syntax: if-else</h3>
+        <pre>
+# if-else example
+num = 8
+if num % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
+# Output:
+# Even
+        </pre>
+        <div class="small-note muted">Explain: else runs when the if condition is False.</div>
+
+        <h3>Syntax: if-elif-else (chained)</h3>
+        <pre>
+# grades example
+marks = 85
+if marks &gt;= 90:
+    print("A")
+elif marks &gt;= 75:
+    print("B")
+else:
+    print("C")
+# Output:
+# B
+        </pre>
+        <div class="small-note muted">Explain: first matching branch executes; others are skipped.</div>
+
+        <h3>Flowchart — simple if / if-else</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="704" height="144" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="24" y="34" fill="#6d5acb" font-weight="700">If / If-Else Flow</text>
+            <rect x="36" y="56" width="180" height="32" rx="6" fill="#f6fff6" stroke="#b3f0db"></rect>
+            <text x="56" y="78" fill="#3b3446">Evaluate condition</text>
+            <path d="M216 72 L300 58" stroke="#dff6ef" stroke-width="2" marker-end="url(#a)"></path>
+            <path d="M216 72 L300 98" stroke="#f0e9ff" stroke-width="2" marker-end="url(#a)"></path>
+            <rect x="300" y="42" width="160" height="30" rx="6" fill="#f7fff9" stroke="#b3f0db"></rect>
+            <text x="320" y="62" fill="#3b3446">If true → do A</text>
+            <rect x="300" y="88" width="160" height="30" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="320" y="108" fill="#3b3446">If false → do B</text>
+            <defs>
+              <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0 0 L8 4 L0 8 z" fill="#d6f0e6"></path>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+      </section>
+
+      <!-- CONDITIONAL ADVANCED -->
+      <section id="cond-advanced" class="slide" role="region" aria-label="Advanced conditionals">
+        <h2>Advanced Conditionals</h2>
+
+        <h3>Logical operators & truthiness</h3>
+        <pre>
+# logical operators
+a = 5
+b = 0
+if a &gt;0 and b==0:
+    print("a positive and b zero")
+# Output:
+# a positive and b zero
+
+# truthiness example
+s = ""
+if not s:
+    print("empty string is falsy")
+# Output:
+# empty string is falsy
+        </pre>
+        <div class="small-note muted">Explain: Python treats empty container/zero/None/False as falsy.</div>
+
+        <h3>Nested conditionals</h3>
+        <pre>
+# nested example
+age = 20
+if age &gt;= 18:
+    if age &gt;= 21:
+        print("adult (21+)")
+    else:
+        print("adult (18-20)")
+else:
+    print("minor")
+# Output:
+# adult (18-20)
+        </pre>
+
+        <h3>match-case (Python 3.10+)</h3>
+        <pre>
+# match-case example
+day = 3
+match day:
+    case 1: print("Mon")
+    case 2: print("Tue")
+    case 3: print("Wed")
+    case _: print("Other")
+# Output:
+# Wed
+        </pre>
+    
+
+        <h3>Flowchart — multi-way match / nested</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="704" height="144" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="24" y="34" fill="#6d5acb" font-weight="700">Multi-way / Nested</text>
+            <rect x="40" y="56" width="160" height="30" rx="6" fill="#f6fff6" stroke="#b3f0db"></rect>
+            <text x="64" y="76" fill="#3b3446">Evaluate value</text>
+            <rect x="240" y="36" width="110" height="24" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="262" y="53" font-size="12" fill="#3b3446">case 1</text>
+            <rect x="360" y="36" width="110" height="24" rx="6" fill="#f7fff9" stroke="#b3f0db"></rect>
+            <text x="382" y="53" font-size="12" fill="#3b3446">case 2</text>
+            <rect x="480" y="36" width="110" height="24" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="500" y="53" font-size="12" fill="#3b3446">case 3</text>
+            <rect x="240" y="88" width="350" height="28" rx="6" fill="#f6f2ff" stroke="#e6e0ff"></rect>
+            <text x="320" y="106" fill="#3b3446">default / fallback</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- LOOPS BASICS -->
+      <section id="loop-basics" class="slide" role="region" aria-label="Loop basics">
+        <h2>Looping — Basics</h2>
+
+        <h3>for loop (iterate sequence)</h3>
+        <pre>
+# simple for
+for i in range(1,6):
+    print(i)
+# Output:
+# 1
+# 2
+# 3
+# 4
+# 5
+        </pre>
+        <div class="small-note muted">Explain: <code>range(start, stop)</code> is stop-exclusive. Use <code>range(1,6)</code> to get 1..5.</div>
+
+        <h3>for with step and list iteration</h3>
+        <pre>
+# with step
+for i in range(0,10,2):
+    print(i)
+# Output:
+# 0
+# 2
+# 4
+# 6
+# 8
+
+# iterate list
+names = ["Anna","Ben","Cara"]
+for name in names:
+    print("Hello", name)
+# Output:
+# Hello Anna
+# Hello Ben
+# Hello Cara
+        </pre>
+
+        <h3>while loop (condition-driven)</h3>
+        <pre>
+# while example
+count = 1
+while count &lt;= 5:
+    print(count)
+    count += 1
+# Output:
+# 1
+# 2
+# 3
+# 4
+# 5
+        </pre>
+
+        <h3>Flowchart — for vs while</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="704" height="134" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="24" y="34" fill="#6d5acb" font-weight="700">For vs While</text>
+            <rect x="36" y="58" width="220" height="28" rx="6" fill="#f7fff9" stroke="#b3f0db"></rect>
+            <text x="52" y="76" fill="#3b3446">for: iterate sequence (known count)</text>
+            <rect x="36" y="98" width="220" height="28" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="52" y="116" fill="#3b3446">while: repeat until condition false (unknown count)</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- LOOPS ADVANCED -->
+      <section id="loop-advanced" class="slide" role="region" aria-label="Advanced loops">
+        <h2>Advanced Looping Topics</h2>
+
+        <h3>Nested loops</h3>
+        <pre>
+# nested example
+for i in range(1,4):
+    for j in range(1,4):
+        print(i, j)
+# Output:
+# 1 1
+# 1 2
+# 1 3
+# 2 1
+# 2 2
+# ...
+        </pre>
+        <div class="small-note muted">Complexity: nested loops often mean O(n × m). Be careful with large inputs.</div>
+
+        <h3>break and continue</h3>
+        <pre>
+for i in range(1,6):
+    if i == 3:
+        continue  # skip printing 3
+    if i == 5:
+        break     # stop loop early
+    print(i)
+# Output:
+# 1
+# 2
+# 4
+        </pre>
+        <div class="small-note muted">Explain: <code>continue</code> jumps to next iteration; <code>break</code> exits the loop entirely.</div>
+
+        <h3>else clause on loops (Python-specific)</h3>
+        <pre>
+# loop else
+for i in range(3):
+    print(i)
+else:
+    print("loop finished normally")
+# Output:
+# 0
+# 1
+# 2
+# loop finished normally
+
+# if break occurs, else is skipped
+        </pre>
+        <div class="small-note muted">Explain: <code>else</code> runs when loop completes without <code>break</code>.</div>
+
+        <h3>Flowchart — nested + break/continue</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 760 180" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="748" height="168" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="24" y="34" fill="#6d5acb" font-weight="700">Nested Loops & Controls</text>
+            <rect x="40" y="60" width="160" height="30" rx="6" fill="#f7fff9" stroke="#b3f0db"></rect>
+            <text x="60" y="80" fill="#3b3446">outer: for i</text>
+            <rect x="240" y="60" width="160" height="30" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="270" y="80" fill="#3b3446">inner: for j</text>
+            <rect x="460" y="60" width="160" height="30" rx="6" fill="#f7fff9" stroke="#b3f0db"></rect>
+            <text x="505" y="80" fill="#3b3446">body (maybe break/continue)</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- PITFALLS -->
+      <section id="pitfalls" class="slide" role="region" aria-label="Pitfalls">
+        <h2>Common Pitfalls & Best Practices</h2>
+        <ul>
+          <li><strong>Off-by-one</strong>: remember Python <code>range(stop)</code> excludes <code>stop</code>. Test small cases.</li>
+          <li><strong>Infinite loops</strong>: always ensure loop conditions change (or include a safe break).</li>
+          <li><strong>Mutable defaults</strong> (function args): avoid mutable default arguments for functions.</li>
+          <li><strong>Deep nesting</strong>: if code gets hard to read, extract functions — one responsibility per function.</li>
+        </ul>
+
+        <h3>Example — common infinite loop mistake & fix</h3>
+        <pre>
+# BAD — missing update -> infinite loop
+count = 0
+while count &lt; 3:
+    print(count)
+    # missing count += 1    <-- infinite loop
+
+# GOOD — add update
+count = 0
+while count &lt; 3:
+    print(count)
+    count += 1
+# Output:
+# 0
+# 1
+# 2
+        </pre>
+
+        <h3>Mini flow — infinite loop fix</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="508" height="118" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="18" y="30" fill="#6d5acb" font-weight="700">Fixing Infinite Loop</text>
+            <circle cx="80" cy="72" r="24" fill="#eafef6" stroke="#b3f0db"></circle>
+            <text x="68" y="76" fill="#3b3446">Start</text>
+            <rect x="130" y="54" width="150" height="28" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="146" y="74" fill="#3b3446">Check condition</text>
+            <rect x="300" y="54" width="120" height="28" rx="6" fill="#eafef6" stroke="#b3f0db"></rect>
+            <text x="315" y="74" fill="#3b3446">Update counter</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- PRACTICE -->
+      <section id="practice" class="slide" role="region" aria-label="Practice examples">
+        <h2>Practice — Real-world Mini Problems (Python)</h2>
+
+        <h3>1 — Factorial (using loop)</h3>
+        <p class="muted">Problem: compute n! for n = 5</p>
+        <pre>
+def factorial(n):
+    result = 1
+    for i in range(1, n+1):
+        result *= i
+    return result
+
+print(factorial(5))
+# Output:
+# 120
+        </pre>
+        <div class="small-note muted">Explain: loop multiplies numbers 1..n. O(n) time.</div>
+
+        <h3>2 — Check palindrome (using conditionals)</h3>
+        <pre>
+def is_palindrome(s):
+    s = ''.join(ch.lower() for ch in s if ch.isalnum())  # normalize
+    return s == s[::-1]
+
+print(is_palindrome("Madam"))      # True
+print(is_palindrome("Hello"))      # False
+# Output:
+# True
+# False
+        </pre>
+        <div class="small-note muted">Explain: clean string, then compare with reversed string.</div>
+
+        <h3>3 — Count vowels (loop + conditional)</h3>
+        <pre>
+def count_vowels(s):
+    s = s.lower()
+    count = 0
+    for ch in s:
+        if ch in "aeiou":
+            count += 1
+    return count
+
+print(count_vowels("Education"))  # Output: 5
+        </pre>
+
+        <h3>Mini flowchart — factorial</h3>
+        <div class="diagram">
+          <svg class="flow-svg" viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="688" height="128" rx="10" fill="#fff" stroke="#efe8ff"/>
+            <text x="20" y="30" fill="#6d5acb" font-weight="700">Factorial (loop) — Flow</text>
+            <rect x="40" y="50" width="140" height="30" rx="6" fill="#eafef6" stroke="#b3f0db"></rect>
+            <text x="58" y="70" fill="#3b3446">result = 1</text>
+            <rect x="210" y="50" width="200" height="30" rx="6" fill="#fff6ff" stroke="#efe8ff"></rect>
+            <text x="230" y="70" fill="#3b3446">for i in 1..n: result *= i</text>
+            <rect x="440" y="50" width="140" height="30" rx="6" fill="#eafef6" stroke="#b3f0db"></rect>
+            <text x="470" y="70" fill="#3b3446">return result</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section id="summary" class="slide" role="region" aria-label="Summary">
+        <h2>Summary :</h2>
+        <ul>
+          <li>Conditional statements help programs make logical choices and execute different actions based on conditions (like if, elif, else).</li>
+          <li>Looping statements allow a set of instructions to run multiple times without writing the same code repeatedly.</li>
+          <li>Using conditions and loops makes the program more efficient, structured, and easier to maintain.</li>
+          <li>These statements make programs behave more like real-world decision processes (for example, checking login credentials or processing multiple records).</li>
+        <li>Understanding conditional and looping statements builds a strong base for topics like functions, recursion, and algorithms.</li>
+      </ul>
+       
+        <div style="text-align:center;margin-top:12px;">
+          <button class="btn" onclick="show('intro')">Back to Start</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="controls" role="toolbar" aria-label="Slide controls">
+      <button class="btn" onclick="prev()">◀ Prev</button>
+      <button class="btn" onclick="next()">Next ▶</button>
+    </div>
+
+    <footer>
+      Presented by Varshitha R [MCA] 
+
+    </footer>
+  </div>
+
+  <script>
+    // Slide order
+    const order = ['intro','cond-basics','cond-advanced','loop-basics','loop-advanced','pitfalls','practice','summary'];
+
+    function show(id){
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if(el){
+        el.classList.add('active');
+        setTimeout(()=> el.scrollIntoView({behavior:'smooth', block:'start'}), 80);
+      }
+    }
+
+    function next(){
+      const cur = document.querySelector('.slide.active');
+      const idx = order.indexOf(cur.id);
+      if(idx < order.length - 1) show(order[idx+1]);
+    }
+
+    function prev(){
+      const cur = document.querySelector('.slide.active');
+      const idx = order.indexOf(cur.id);
+      if(idx > 0) show(order[idx-1]);
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => show('intro'));
+
+    // initialize
+    show('intro');
+  </script>
+</body>
+</html>
